@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from .models import Voucher, Transactions
 User = get_user_model()
 
 
@@ -51,3 +52,24 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         
         return user
+
+
+# other serializers
+
+class VoucherTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = ('amount',)
+
+
+class VoucherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = "__all__"
+
+# get all transactions
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transactions
+        fields = "__all__"
