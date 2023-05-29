@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Voucher, Transactions
+
 User = get_user_model()
 
 
@@ -50,7 +51,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        
         return user
 
 
@@ -62,9 +62,15 @@ class VoucherTransactionSerializer(serializers.ModelSerializer):
         fields = ('amount',)
 
 
+class RedeemVoucherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = ('amount', 'code')
+
 class VoucherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Voucher
+        # exclude = ('user',)
         fields = "__all__"
 
 # get all transactions
