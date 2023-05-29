@@ -8,6 +8,7 @@ from .managers import UserManager
 
 class User(AbstractUser):
     # additional fields 
+    username=None
     email = models.EmailField(_('email address'), unique=True, error_messages={'unique': 'Email address already exists for another user'})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
