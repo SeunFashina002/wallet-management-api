@@ -1,6 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import gettext as _
 
+
 class UserManager(BaseUserManager):
     """
     A user model manager where email is the unique identifier
@@ -18,6 +19,10 @@ class UserManager(BaseUserManager):
         # hash the password
         user.set_password(password)
         user.save(using=self.db)
+
+        from core.models import Wallet #to avoid circular imports
+        Wallet.objects.create(user=user)
+        
         return user
 
     # create admin user
