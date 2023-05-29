@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 from .managers import UserManager
 
+
 # Create your models here.
 
 class User(AbstractUser):
@@ -24,9 +25,19 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
 
-# other models
+# wallet balance
+
+class Wallet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # gave users a default of 100, 000 in their balance for the voucher to be tested
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=100000.00)
+
+
+    def __str__(self):
+        return f"{self.balance}"
 
 class Voucher(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=9, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     is_redeemed = models.BooleanField(default=False)
