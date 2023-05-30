@@ -59,12 +59,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -177,6 +179,12 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.MyTokenObtainPairSerializer",
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'https://wallet-api-2dca.onrender.com',
+    'http://127.0.0.1:8000'
+]
+
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
