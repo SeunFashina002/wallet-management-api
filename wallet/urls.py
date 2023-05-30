@@ -17,9 +17,29 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from core.views import api_home
+from rest_framework import permissions
+
+# swagger
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from django.urls import path
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="wallet Management Api",
+        default_version="v1",
+        description="A comprehensive wallet management API with features for generating payment vouchers, redeeming vouchers, tracking transaction history and managing digital wallet balances in a fintech application",
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
     path('', api_home, name='home'),
     path('admin/', admin.site.urls),
     path('api/v1/', include('core.urls')),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
 ]
