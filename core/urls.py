@@ -1,10 +1,8 @@
 from django.urls import path
-from .views import UserRegister, UserLogin, TransactionsList, VoucherCreate, VoucherList, VoucherRedeem, TransactionSentList, TransactionReceivedList, api_home
+from .views import UserRegister, UserLogin, TransactionsList, VoucherCreate, VoucherList, VoucherRedeem, TransactionSentList, TransactionReceivedList
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
-
-    path('', api_home, name='home'),
 
     path('auth/login/', UserLogin.as_view(), name='token_obtain_pair'),
     path('auth/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),   

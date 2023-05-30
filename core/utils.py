@@ -11,4 +11,4 @@ def generate_voucher_code():
 
 # welcome data response
 
-message = "Welcome to okeowo wallet api, while we wait for the api documentation. Here is a list of the available endpoints: (1) api/v1/auth/login/  (2) api/v1/auth/register/   (3)  api/v1/auth/transactions/   (4)  api/v1/auth/transactions/sent   (5)  api/v1/auth/transactions/received   (6)  api/v1/auth/vouchers/  (7)  api/v1/auth/vouchers/all   (8)  api/v1/auth/vouchers/redeem"
+message = "Welcome to okeowo wallet api, while we wait for the api documentation. Here is a list of the available endpoints: (1) https://wallet-api-2dca.onrender.com/api/v1/auth/login/  (2) https://wallet-api-2dca.onrender.com/api/v1/auth/register/   (3)  https://wallet-api-2dca.onrender.com/api/v1/auth/transactions/   (4)  https://wallet-api-2dca.onrender.com/api/v1/auth/transactions/sent   (5)  https://wallet-api-2dca.onrender.com/api/v1/auth/transactions/received   (6)  https://wallet-api-2dca.onrender.com/api/v1/auth/vouchers/  (7)  https://wallet-api-2dca.onrender.com/api/v1/auth/vouchers/all   (8)  https://wallet-api-2dca.onrender.com/api/v1/auth/vouchers/redeem"
