@@ -1,4 +1,5 @@
 from math import perm
+from urllib import request
 from .serializers import UserRegisterSerializer, UserSerializer, MyTokenObtainPairSerializer, VoucherSerializer, TransactionSerializer, VoucherTransactionSerializer, RedeemVoucherSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
@@ -91,9 +92,9 @@ class VoucherCreate(CreateAPIView):
 
 class VoucherList(ListAPIView):
     serializer_class = VoucherSerializer
-    queryset = Voucher.objects.all()
+    
     def get(self, request, *args, **kwargs):
-        qs = self.get_queryset()
+        qs = Voucher.objects.filter(user=request.user)
         if qs.exists():
             serializer = self.get_serializer(qs, many=True)
             return Response({
@@ -110,10 +111,10 @@ class VoucherList(ListAPIView):
 # get all transactions
 class TransactionsList(ListAPIView):
     serializer_class = TransactionSerializer
-    queryset = Transactions.objects.all()
+    
 
     def list(self, request, *args, **kwargs):
-        qs = self.get_queryset()
+        qs = Transactions.objects.filter(user=request.user)
         if qs.exists():
             serializer = self.get_serializer(qs, many=True)
             return Response({
@@ -169,7 +170,7 @@ class VoucherRedeem(CreateAPIView):
                     voucher = voucher,
                     transaction_amount = amount,
                     transaction_type = Transactions.SENT,
-                    user = self.request.user
+                    user = voucher_owner
                 )
                 
                 
@@ -183,7 +184,7 @@ class VoucherRedeem(CreateAPIView):
                     voucher = voucher,
                     transaction_amount = amount,
                     transaction_type = Transactions.RECEIVED,
-                    user = voucher_owner
+                    user = self.request.user
                 )
 
                 return Response({'success': 'Voucher redeemed successfully.'}, status=status.HTTP_200_OK)
