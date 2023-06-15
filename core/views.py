@@ -136,46 +136,47 @@ class VoucherRedeem(CreateAPIView):
 
         try:
             # get the voucher and the owner attached to it
-            voucher = Voucher.objects.get(code=code, is_redeemed=False)
+            voucher = Voucher.objects.get(code=code)
             voucher_owner = voucher.user
         except Voucher.DoesNotExist:
             return Response({'error': 'Invalid voucher code.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # ensure there is sufficient balance in the voucher
-        # single use implementation
 
-        # return Response({"vocuher otp": voucher.otp.otp, "voucher pin": pin})
+        # return Response({"vocuher owner": voucher_owner.first_name, "voucher owner": voucher_owner.last_name})
+
+        # single use voucher implementation
         if voucher.voucher_type == Voucher.SINGLE:
-            if voucher_owner is not request.user:
-                    if Decimal(amount) == voucher.amount:
-                        if voucher.is_redeemed == False:
-                                if str(pin) == voucher.otp.otp:
-                                    if voucher.otp and voucher.otp.has_expired == False:
-                                        voucher.amount -= Decimal(amount)
-                                        voucher.is_redeemed = True
-                                        voucher.save()
+            if not voucher_owner == request.user:
+                if voucher.is_redeemed == False:
+                    if str(pin) == voucher.otp.otp:
+                        if voucher.otp and voucher.otp.has_expired == False:
+                            if Decimal(amount) == voucher.amount:
+                                
+                                voucher.amount -= Decimal(amount)
+                                voucher.is_redeemed = True
+                                voucher.save()
 
-                                        # recipient receives balance in wallet
-                                        receiver_wallet = Wallet.objects.get(user=request.user)
-                                        receiver_wallet.balance += Decimal(amount)
-                                        receiver_wallet.save()
+                                # recipient receives balance in wallet
+                                receiver_wallet = Wallet.objects.get(user=request.user)
+                                receiver_wallet.balance += Decimal(amount)
+                                receiver_wallet.save()
 
-                                        # invalidate the otp
-                                        voucher.otp.has_expired = True
-                                        voucher.otp.delete()
+                                # invalidate the otp
+                                voucher.otp.has_expired = True
+                                voucher.otp.delete()
 
-                                        # create a transaction for the recipient
-                                        Transactions.objects.create(
-                                            voucher=voucher,
-                                            transaction_amount=amount,
-                                            transaction_type=Transactions.RECEIVED,
-                                            user=request.user
-                                        )
-                                        return Response({'success': 'Voucher redeemed successfully.'}, status=status.HTTP_200_OK)
-                                    return Response({'error': 'This pin has been used for this voucher'}, status=status.HTTP_400_BAD_REQUEST)        
-                                return Response({'error': 'Invalid pin'}, status=status.HTTP_400_BAD_REQUEST)        
-                        return Response({'error': 'This voucher has been used'}, status=status.HTTP_400_BAD_REQUEST)        
-                    return Response({'message': 'Sorry, for a single use voucher you have to redeem the exact amount'}, status=status.HTTP_400_BAD_REQUEST)
+                                # create a transaction for the recipient
+                                Transactions.objects.create(
+                                    voucher=voucher,
+                                    transaction_amount=amount,
+                                    transaction_type=Transactions.RECEIVED,
+                                    user=request.user
+                                )
+                                return Response({'success': 'Voucher redeemed successfully.'}, status=status.HTTP_200_OK)
+                            return Response({'message': 'Sorry, for a single use voucher you have to redeem the exact amount'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'error': 'This pin has been used for this voucher'}, status=status.HTTP_400_BAD_REQUEST)        
+                    return Response({'error': 'Invalid pin'}, status=status.HTTP_400_BAD_REQUEST)        
+                return Response({'error': 'This voucher has been used'}, status=status.HTTP_400_BAD_REQUEST)                
             return Response({'message': 'Sorry, you cannot redeem your own voucher'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': 'Multi use vouchers are not yet available'}, status=status.HTTP_204_NO_CONTENT)
 
