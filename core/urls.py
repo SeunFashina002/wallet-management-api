@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserRegister, UserLogin, TransactionsList, VoucherCreate, VoucherList, VoucherRedeem, TransactionSentList, TransactionReceivedList
+from .views import UserRegister, UserLogin, TransactionsList, VoucherCreate, VoucherList, VoucherRedeem, TransactionSentList, TransactionReceivedList, VoucherSingleCreate
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     
     # post request to create voucher, get request to list all vouchers
     path('vouchers/', VoucherCreate.as_view(), name='create_voucher'),
+    path('vouchers/create-single', VoucherSingleCreate.as_view(), name='create_single_use_voucher'),
     path('vouchers/all', VoucherList.as_view(), name='list_voucher'),
     path('vouchers/redeem', VoucherRedeem.as_view(), name='redeem_voucher'),
 ]
