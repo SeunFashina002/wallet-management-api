@@ -57,15 +57,18 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 # other serializers
 
 class VoucherTransactionSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Voucher
         fields = ('amount',)
 
 
 class RedeemVoucherSerializer(serializers.ModelSerializer):
+    pin = serializers.CharField(write_only=True, required=True, max_length=4)
     class Meta:
         model = Voucher
-        fields = ('amount', 'code')
+        fields = ('amount', 'code', 'pin',)
+
 
 class VoucherSerializer(serializers.ModelSerializer):
     class Meta:

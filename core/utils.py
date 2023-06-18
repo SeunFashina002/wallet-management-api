@@ -1,13 +1,21 @@
 import string
 import random
-from core.models import Wallet
+from core.models import Voucher, VoucherOtp
 
 code_length = 9
 code_char = string.digits #(0-9) digits
 
 def generate_voucher_code():
-    voucher_code = ''.join(random.choice(code_char) for _ in range(code_length))
-    return voucher_code
+    while True:
+        voucher_code = ''.join(random.choice(code_char) for _ in range(code_length))
+        if not Voucher.objects.filter(code=voucher_code).exists():
+            return voucher_code
+
+def generate_otp():
+    while True:
+        otp = ''.join(random.choice(code_char) for _ in range(4))
+        if not VoucherOtp.objects.filter(otp=otp).exists():
+            return otp
 
 # welcome data response
 
